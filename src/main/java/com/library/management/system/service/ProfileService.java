@@ -1,7 +1,7 @@
 package com.library.management.system.service;
 
 import com.library.management.system.data.entity.Profile;
-import com.library.management.system.repository.UsersRepository;
+import com.library.management.system.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,11 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ProfileService {
-    private final UsersRepository usersRepository;
+    private final ProfileRepository profileRepository;
 
     public ResponseEntity<?> getProfile(Long profileId) {
         log.info("user id: {}", profileId);
-        Profile profile = usersRepository.findById(profileId).orElse(null);
+        Profile profile = profileRepository.findById(profileId).orElse(null);
         if (profile == null) {
             return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
         }
@@ -26,7 +26,7 @@ public class ProfileService {
     }
 
     public ResponseEntity<?> getAllProfiles() {
-        List<Profile> profiles = usersRepository.findAll();
+        List<Profile> profiles = profileRepository.findAll();
         if (profiles.isEmpty()) {
             return new ResponseEntity<>("There is no users present in db", HttpStatus.NOT_FOUND);
         }
@@ -35,6 +35,6 @@ public class ProfileService {
 
     public Profile saveProfile(Profile profile) {
         log.info("Saving new user: {}", profile);
-        return usersRepository.save(profile);
+        return profileRepository.save(profile);
     }
 }

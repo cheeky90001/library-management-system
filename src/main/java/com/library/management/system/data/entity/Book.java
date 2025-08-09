@@ -3,8 +3,6 @@ package com.library.management.system.data.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Data
 @Table(name = "book")
@@ -15,7 +13,5 @@ public class Book {
     private Long id;
     private String name;
     private String author;
-    @OneToMany(mappedBy = "book")
-    private List<Rental> rentals;
     private Boolean isAvailable;
 }

@@ -5,7 +5,7 @@ import com.library.management.system.data.entity.Profile;
 import com.library.management.system.data.entity.Rental;
 import com.library.management.system.data.dto.RentalResponseDTO;
 import com.library.management.system.repository.RentalRepository;
-import com.library.management.system.repository.UsersRepository;
+import com.library.management.system.repository.ProfileRepository;
 import com.library.management.system.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 public class RentalService {
 
     private final RentalRepository rentalRepository;
-    private final UsersRepository usersRepository;
+    private final ProfileRepository profileRepository;
     private final BookRepository bookRepository;
 
     public RentalResponseDTO rentBook(Long userId, Long bookId) {
-        Profile profile = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
+        Profile profile = profileRepository.findById(userId).orElseThrow(() -> new RuntimeException("Profile not found"));
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
 
         Rental rental = Rental.builder()

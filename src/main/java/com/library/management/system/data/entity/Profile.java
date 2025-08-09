@@ -1,9 +1,9 @@
 package com.library.management.system.data.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
 
 @Entity
 @Data
@@ -18,6 +18,4 @@ public class Profile {
     private String email;
     @Column(name = "personal_id")
     private String personalId;
-    @OneToMany(mappedBy = "profile")
-    private List<Rental> rentals;
 }

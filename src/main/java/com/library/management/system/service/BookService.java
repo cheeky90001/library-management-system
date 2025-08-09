@@ -48,7 +48,6 @@ public class BookService {
 
     public ResponseEntity<List<Book>> getAllBooksByAuthor(String author) {
         log.info(author);
-        log.info(author);
         List<Book> books = bookRepository.findByAuthor(author);
         if (books.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

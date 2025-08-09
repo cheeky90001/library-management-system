@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: shipment_db
+    restart: always
+    ports:
+      - "5423:5432"
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: STS
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

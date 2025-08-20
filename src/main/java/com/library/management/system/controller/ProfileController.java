@@ -40,14 +40,12 @@ public class ProfileController {
 
     @PostMapping("/{profileId}/rent/{bookId}")
     public ResponseEntity<RentalResponseDTO> rentBook(@PathVariable Long profileId, @PathVariable Long bookId) {
-        log.info("Renting book for user: {}", profileId);
         RentalResponseDTO response = rentalService.rentBook(profileId, bookId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{profileId}/allBooks")
     public ResponseEntity<List<Book>> getAllProfilesRentedBooks(@PathVariable Long profileId) {
-        log.info("Fetching all rented books for profile: ");
         ProfilesRentedBooksResponseDTO responseDto =  rentalService.getAllRentedBooks(profileId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

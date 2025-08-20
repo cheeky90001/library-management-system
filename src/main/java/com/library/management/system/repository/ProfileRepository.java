@@ -1,12 +1,14 @@
 package com.library.management.system.repository;
 
 import com.library.management.system.data.entity.Profile;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+@Transactional
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     @Query(value = "SELECT p.*, b.* FROM profile p " +

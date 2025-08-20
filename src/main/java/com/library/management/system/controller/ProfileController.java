@@ -1,5 +1,7 @@
 package com.library.management.system.controller;
 
+import com.library.management.system.data.dto.ProfilesRentedBooksResponseDTO;
+import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
 import com.library.management.system.data.dto.RentalResponseDTO;
 import com.library.management.system.service.ProfileService;
@@ -10,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/profile")
 @RequiredArgsConstructor
 @Slf4j
 public class ProfileController {
@@ -34,11 +38,18 @@ public class ProfileController {
         return new ResponseEntity<>(profileService.saveProfile(profile), HttpStatus.CREATED);
     }
 
-    @PostMapping("/rent/{profileId}/book/{bookId}")
+    @PostMapping("/{profileId}/rent/{bookId}")
     public ResponseEntity<RentalResponseDTO> rentBook(@PathVariable Long profileId, @PathVariable Long bookId) {
         log.info("Renting book for user: {}", profileId);
         RentalResponseDTO response = rentalService.rentBook(profileId, bookId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{profileId}/allBooks")
+    public ResponseEntity<List<Book>> getAllProfilesRentedBooks(@PathVariable Long profileId) {
+        log.info("Fetching all rented books for profile: ");
+        ProfilesRentedBooksResponseDTO responseDto =  rentalService.getAllRentedBooks(profileId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //Create users, get users, get specific user, rent Book

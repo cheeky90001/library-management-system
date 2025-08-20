@@ -1,6 +1,8 @@
 package com.library.management.system.service;
 
+import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
+import com.library.management.system.data.entity.Rental;
 import com.library.management.system.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

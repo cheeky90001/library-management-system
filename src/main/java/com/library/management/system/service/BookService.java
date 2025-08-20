@@ -17,17 +17,15 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public Book createBook(Book book) {
-        if (book == null) {
-            log.warn("Attempted to create a null book.");
-            throw new IllegalArgumentException("Book cannot be null");
-        }
+        assert book != null : "Book should not be null!";
+
         return bookRepository.save(book);
     }
 
     public ResponseEntity<?> getBook(String bookName) {
         if (bookName == null || bookName.trim().isEmpty()) {
             log.warn("Book name is null or empty.");
-            new ResponseEntity<>("Book not found", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Book is not in valid format", HttpStatus.BAD_REQUEST);
         }
         log.info("Book name: {}", bookName);
         Book book = bookRepository.findByName(bookName);

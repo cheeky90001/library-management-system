@@ -1,6 +1,6 @@
 package com.library.management.system.service;
 
-import com.library.management.system.data.dto.ProfilesRentedBooksResponseDTO;
+import com.library.management.system.data.dto.BookDTO;
 import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
 import com.library.management.system.data.entity.Rental;
@@ -13,9 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -51,10 +50,22 @@ public class RentalService {
                 .build();
     }
 
-    public ProfilesRentedBooksResponseDTO getAllRentedBooks(Long profileId) {
+    public List<BookDTO> getAllRentedBooks(Long profileId) {
+        log.info("Fetching rentals for profileId: {}", profileId);
+        assert profileId != null : "Profile id is null";
+
         List<Rental> rentedData = rentalRepository.findAllByProfileId(profileId);
+        if (rentedData.isEmpty()) {
+            log.warn("No rentals found for profileId: {}", profileId);
+            return new ArrayList<>();
+        }
+        return rentedData.stream()
+                .filter(rental -> rental.getBook() != null)
+                .map(rental -> createBookDTO(rental.getBook()))
+                .toList();
+    }
 
-        rentedData.stream().filter(rental -> rental.getBook() != null).forEach(rental -> );
-
+    private BookDTO createBookDTO(Book book) {
+        return BookDTO.builder().name(book.getName()).author(book.getAuthor()).build();
     }
 }

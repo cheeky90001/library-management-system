@@ -1,5 +1,6 @@
 package com.library.management.system.service;
 
+import com.library.management.system.data.dto.BookDTO;
 import com.library.management.system.data.dto.ProfilesRentedBooksResponseDTO;
 import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,10 +53,14 @@ public class RentalService {
                 .build();
     }
 
-    public ProfilesRentedBooksResponseDTO getAllRentedBooks(Long profileId) {
+    public List<BookDTO> getAllRentedBooks(Long profileId) {
         List<Rental> rentedData = rentalRepository.findAllByProfileId(profileId);
+        List<BookDTO> bookDTOS = new ArrayList<>();
+        rentedData.stream().filter(rental -> rental.getBook() != null).forEach(rental -> bookDTOS.add(createBookDTO(rental.getBook())));
+        return bookDTOS;
+    }
 
-        rentedData.stream().filter(rental -> rental.getBook() != null).forEach(rental -> );
-
+    private BookDTO createBookDTO(Book book) {
+        return BookDTO.builder().name(book.getName()).author(book.getAuthor()).build();
     }
 }

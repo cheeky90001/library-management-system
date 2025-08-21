@@ -1,5 +1,6 @@
 package com.library.management.system.controller;
 
+import com.library.management.system.data.dto.BookDTO;
 import com.library.management.system.data.dto.ProfilesRentedBooksResponseDTO;
 import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
@@ -45,9 +46,9 @@ public class ProfileController {
     }
 
     @GetMapping("/{profileId}/allBooks")
-    public ResponseEntity<List<Book>> getAllProfilesRentedBooks(@PathVariable Long profileId) {
-        ProfilesRentedBooksResponseDTO responseDto =  rentalService.getAllRentedBooks(profileId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<BookDTO>> getAllProfilesRentedBooks(@PathVariable Long profileId) {
+        List<BookDTO> books =  rentalService.getAllRentedBooks(profileId);
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     //Create users, get users, get specific user, rent Book

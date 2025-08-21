@@ -1,8 +1,6 @@
 package com.library.management.system.controller;
 
 import com.library.management.system.data.dto.BookDTO;
-import com.library.management.system.data.dto.ProfilesRentedBooksResponseDTO;
-import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
 import com.library.management.system.data.dto.RentalResponseDTO;
 import com.library.management.system.service.ProfileService;
@@ -47,7 +45,12 @@ public class ProfileController {
 
     @GetMapping("/{profileId}/allBooks")
     public ResponseEntity<List<BookDTO>> getAllProfilesRentedBooks(@PathVariable Long profileId) {
+        log.info("Fetching all rented books for profileId: {}", profileId);
         List<BookDTO> books =  rentalService.getAllRentedBooks(profileId);
+        if (books.isEmpty()) {
+            log.warn("No rented books found for profileId: {}", profileId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 

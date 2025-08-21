@@ -1,7 +1,6 @@
 package com.library.management.system.service;
 
 import com.library.management.system.data.dto.BookDTO;
-import com.library.management.system.data.dto.ProfilesRentedBooksResponseDTO;
 import com.library.management.system.data.entity.Book;
 import com.library.management.system.data.entity.Profile;
 import com.library.management.system.data.entity.Rental;
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -54,10 +51,18 @@ public class RentalService {
     }
 
     public List<BookDTO> getAllRentedBooks(Long profileId) {
+        log.info("Fetching rentals for profileId: {}", profileId);
+        assert profileId != null : "Profile id is null";
+
         List<Rental> rentedData = rentalRepository.findAllByProfileId(profileId);
-        List<BookDTO> bookDTOS = new ArrayList<>();
-        rentedData.stream().filter(rental -> rental.getBook() != null).forEach(rental -> bookDTOS.add(createBookDTO(rental.getBook())));
-        return bookDTOS;
+        if (rentedData.isEmpty()) {
+            log.warn("No rentals found for profileId: {}", profileId);
+            return new ArrayList<>();
+        }
+        return rentedData.stream()
+                .filter(rental -> rental.getBook() != null)
+                .map(rental -> createBookDTO(rental.getBook()))
+                .toList();
     }
 
     private BookDTO createBookDTO(Book book) {

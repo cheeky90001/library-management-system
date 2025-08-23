@@ -43,7 +43,7 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{profileId}/allBooks")
+    @GetMapping("/{profileId}/all-books")
     public ResponseEntity<List<BookDTO>> getAllProfilesRentedBooks(@PathVariable Long profileId) {
         log.info("Fetching all rented books for profileId: {}", profileId);
         List<BookDTO> books =  rentalService.getAllRentedBooks(profileId);
@@ -52,6 +52,12 @@ public class ProfileController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @PostMapping("/{profileId}/return-book/{bookId}")
+    public ResponseEntity returnBook(@PathVariable Long profileId, @PathVariable Long bookId) {
+        log.info("Hi all im in this api now");
+        return rentalService.returnBook(profileId, bookId);
     }
 
     //Create users, get users, get specific user, rent Book

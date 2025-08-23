@@ -10,11 +10,14 @@ import com.library.management.system.repository.ProfileRepository;
 import com.library.management.system.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -67,5 +70,27 @@ public class RentalService {
 
     private BookDTO createBookDTO(Book book) {
         return BookDTO.builder().name(book.getName()).author(book.getAuthor()).build();
+    }
+
+    public ResponseEntity returnBook(Long profileId, Long bookId) {
+        if (profileId == null || bookId == null) {
+            throw new IllegalArgumentException("Missing key parameters to search book for");
+        }        List<Rental> rentedBooks = rentalRepository.findAllByProfileId(profileId);
+        if (Objects.isNull(rentedBooks) || rentedBooks.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Rental rentedBook = rentedBooks.stream().filter(rental -> Objects.equals(rental.getBook().getId(), bookId)).findFirst().orElse(null);
+        if (rentedBook == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            Book book = rentedBook.getBook();
+            book.setIsAvailable(Boolean.TRUE);
+            rentalRepository.delete(rentedBook);
+            bookRepository.save(book);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

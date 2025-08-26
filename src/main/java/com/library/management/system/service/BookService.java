@@ -22,18 +22,18 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public ResponseEntity<?> getBook(String bookName) {
-        if (bookName == null || bookName.trim().isEmpty()) {
+    public ResponseEntity<?> getBooks(String searchParam) {
+        if (searchParam == null || searchParam.trim().isEmpty()) {
             log.warn("Book name is null or empty.");
             return new ResponseEntity<>("Book is not in valid format", HttpStatus.BAD_REQUEST);
         }
-        log.info("Book name: {}", bookName);
-        Book book = bookRepository.findByName(bookName);
-        if (book == null) {
-            log.info("No book found with name: {}", bookName);
+        log.info("Book name: {}", searchParam);
+        List<Book> books = bookRepository.findBySearchParameter(searchParam);
+        if (books == null) {
+            log.info("No book found with name: {}", searchParam);
             return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(book, HttpStatus.OK);
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Book>> getAllBooks() {

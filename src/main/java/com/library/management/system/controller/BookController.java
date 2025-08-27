@@ -23,8 +23,8 @@ public class BookController {
         return new ResponseEntity<>(bookService.createBook(book), HttpStatus.CREATED);
     }
     @GetMapping("")
-    public ResponseEntity<?> getBook(@RequestParam String bookName) {
-        return bookService.getBook(bookName);
+    public ResponseEntity<?> getBook(@RequestParam String searchParam) {
+        return bookService.getBooks(searchParam);
     }
 
     @GetMapping("/all")
